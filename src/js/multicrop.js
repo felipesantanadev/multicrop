@@ -126,6 +126,7 @@ function MultiCrop () {
         var buttonFront = document.createElement('button');
         buttonFront.appendChild(textFront);
         buttonFront.setAttribute('class', 'btn-front btn-switched');
+        buttonFront.setAttribute('type', 'button');
         buttonFront.addEventListener("click", function (e) {
             const buttonBack = document.getElementsByClassName('btn-back')[0];
             if(buttonBack){
@@ -142,6 +143,7 @@ function MultiCrop () {
         var buttonBack = document.createElement('button');
         buttonBack.appendChild(textBack);
         buttonBack.setAttribute('class', 'btn-back');
+        buttonBack.setAttribute('type', 'button');
         buttonBack.addEventListener("click", function (e) {
             const buttonFront = document.getElementsByClassName('btn-front')[0];
             if(buttonFront){
@@ -334,6 +336,7 @@ function MultiCrop () {
         var button = document.createElement('button');
         button.setAttribute('id', id);
         button.setAttribute('class', className);
+        button.setAttribute('type', 'button');
 
         var span = document.createElement('span');
         span.setAttribute('class', 'material-icons');
@@ -349,11 +352,12 @@ function MultiCrop () {
         return button;
     }
 
-    this.addButton = function (id, className, iconName, text, onclickAction) {
+    this.addButton = function (id, className, iconName, text, onclickAction, atBeginning) {
         var options = document.getElementById('workspace-options');
         var button = document.createElement('button');
         button.setAttribute('id', id);
         button.setAttribute('class', className);
+        button.setAttribute('type', 'button');
 
         var span = document.createElement('span');
         span.setAttribute('class', 'material-icons');
@@ -366,7 +370,11 @@ function MultiCrop () {
             button.addEventListener('click', onclickAction);
         }
 
-        options.insertBefore(button, options.firstChild);
+        if(atBeginning){
+            options.insertBefore(button, options.firstChild);
+        } else {
+            options.appendChild(button);
+        }
     }
 
     this.getCroppedImages = function () {
@@ -492,7 +500,7 @@ function MultiCrop () {
         }
     }
 
-    function crop () {
+    const crop = async () => {
         croppedImages = [];
         var results = document.getElementById('crop-links');
         if(results){
@@ -537,6 +545,7 @@ function MultiCrop () {
             link.appendChild(linkText);
             link.setAttribute('data-img', img);
             link.setAttribute('class', 'btn-link');
+            link.setAttribute('type', 'button');
             link.setAttribute('onclick', 'displayCrop(this)');
             results.appendChild(link);
         }

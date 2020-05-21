@@ -15,28 +15,28 @@
 <script>
     var multiCrop = new MultiCrop();
     multiCrop.loadWorkspace({
-        width: 850, // Largura do canvas
-        height: 425, // Altura do canvas
-        defaultCropAreaWidth: 100, // Largura inicial do objeto de crop
-        defaultCropAreaHeight: 120, // Altura inicial do objeto de crop
-        cropAreaColor: 'red', // Cor do objeto de crop (qualquer valor RGB)
-        cropAreaOpacity: 0.6, // Opacidade do objeto de crop (deve ser um valor de 0 a 1)
-        imageFormat: 'bmp', // Formato da imagem objetida ao realizar o recorte
-        devMode: false, // Habilita ou desabilita o console de coordenadas dos objetos de crop
-        isFrontAndBack: true, // Indica se o workspace irá trabalhar com imagens frente e verso ou não
-        displayCropResults: true, // Habilita ou desabilita os botões para visualizar as imagens recortadas
+        width: 850, // Canvas width
+        height: 425, // Canvas height
+        defaultCropAreaWidth: 100, //  Crop object's default width
+        defaultCropAreaHeight: 120, // Crop object's default height
+        cropAreaColor: 'red', // Crop object's color (any RGB value)
+        cropAreaOpacity: 0.6, // Crop object's opacity
+        imageFormat: 'bmp', // Cropped images format
+        devMode: false, // Enables or disables the coordinates console
+        isFrontAndBack: true, // Indicates if the workspace works with front and back images
+        displayCropResults: true, // Enables or disables the crop results visualization
         initialCropAreas: [
             { isFront: true, name: "cropArea1", x: 10, y: 40.9756862745098, width: 81, height: 61 },
             { isFront: true, name: "cropArea2", x: 95.79764705882354, y: 33.981176470588224, width: 81, height: 61 },
             { isFront: false, name: "cropArea3", x: 10.000000000000021, y: 109.92156862745097, width: 81, height: 61 },
             { isFront: false, name: "cropArea4", x: 95.79764705882356, y: 105.92470588235292, width: 81, height: 61 }
-        ],
-        // Para remover um ou vários botões do workspace, utilize a propriedade disableButtons:
+        ], // Applies initial crop objects in the workspace
+        // You can remove default buttons by using the disableButtons property:
         // disableButtons: ['add-image', 'add-crop', 'crop-all', 'remove-crop']
     }).then(() => { 
         // Adicionando um botão customizado no workspace:
-        // multiCrop.addButton('id', 'class', 'icon name', 'text', click_function);
-        // Ex: multiCrop.addButton('digitalizar', 'btn-multicrop', 'print', 'Digitalizar ficha', () => console.log('clicou'));
+        // multiCrop.addButton('id', 'class', 'icon name', 'text', click_function, atBeginning);
+        // Ex: multiCrop.addButton('digitalizar', 'btn-multicrop', 'print', 'Digitalizar ficha', () => console.log('clicou'), false);
         
         // Recuperando as imagens recortadas do workspace:
         // multiCrop.getCroppedImages();

@@ -60,9 +60,9 @@ multiCrop.loadWorkspace({
 multiCrop.loadWorkspace({
     ...
 }).then(() => {
-    // multiCrop.addButton('id', 'class', 'material icon', 'text', click_function);
+    // multiCrop.addButton('id', 'class', 'material icon', 'text', click_function, atBeginning);
     // Eg:
-    multiCrop.addButton('my-id', 'my-class', 'print', 'Click me', () => console.log('click event'));
+    multiCrop.addButton('my-id', 'my-class', 'print', 'Click me', () => console.log('click event'), false);
 });
 ```
 
