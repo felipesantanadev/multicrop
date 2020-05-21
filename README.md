@@ -44,10 +44,10 @@ multiCrop.loadWorkspace({
         isFrontAndBack: true, // Indicates if the workspace works with front and back images
         displayCropResults: true, // Enables or disables the crop results visualization
         initialCropAreas: [
-            { isFront: true, name: "recorte1", x: 10, y: 40.9756862745098, width: 81, height: 61 },
-            { isFront: true, name: "recorte2", x: 95.79764705882354, y: 33.981176470588224, width: 81, height: 61 },
-            { isFront: false, name: "recorte3", x: 10.000000000000021, y: 109.92156862745097, width: 81, height: 61 },
-            { isFront: false, name: "recorte4", x: 95.79764705882356, y: 105.92470588235292, width: 81, height: 61 }
+            { isFront: true, name: "cropArea1", x: 10, y: 40.9756862745098, width: 81, height: 61 },
+            { isFront: true, name: "cropArea2", x: 95.79764705882354, y: 33.981176470588224, width: 81, height: 61 },
+            { isFront: false, name: "cropArea3", x: 10.000000000000021, y: 109.92156862745097, width: 81, height: 61 },
+            { isFront: false, name: "cropArea4", x: 95.79764705882356, y: 105.92470588235292, width: 81, height: 61 }
         ], // Applies initial crop objects in the workspace
         // You can remove default buttons by using the disableButtons property:
         // disableButtons: ['add-image', 'add-crop', 'crop-all', 'remove-crop']
