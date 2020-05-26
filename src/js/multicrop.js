@@ -40,6 +40,7 @@ function MultiCrop () {
 
         // Creating the workspace area
         var workspaceArea = document.createElement('div');
+        workspaceArea.setAttribute('id', 'workspace-area');
         workspaceArea.setAttribute('class', 'workspace-area');
         
         var workspaceDevArea = document.createElement('textarea');
@@ -85,6 +86,9 @@ function MultiCrop () {
             fileInput.style.display = 'none';
             fileInput.addEventListener('change', function(e){
                 loadImage(fileInput);
+                if(options.imageUploadEvent != undefined){
+                    options.imageUploadEvent();
+                }
             });
 
             fileSelection.addEventListener("click", function (e) {
@@ -119,8 +123,9 @@ function MultiCrop () {
         workspaceResults.appendChild(linkRow);
 
         // Creating the switch Front and Back option
-        var swtichRow = document.createElement('div');
-        swtichRow.setAttribute('class', 'options-row');
+        var switchRow = document.createElement('div');
+        switchRow.setAttribute('id', 'workspace-switch');
+        switchRow.setAttribute('class', 'options-row');
 
         var textFront = document.createTextNode('Frente');
         var buttonFront = document.createElement('button');
@@ -156,8 +161,8 @@ function MultiCrop () {
             switchImages();
         }, false);
 
-        swtichRow.appendChild(buttonFront);
-        swtichRow.appendChild(buttonBack);
+        switchRow.appendChild(buttonFront);
+        switchRow.appendChild(buttonBack);
 
         // Packing the container
         container.appendChild(displayModal);
@@ -166,7 +171,7 @@ function MultiCrop () {
             container.appendChild(workspaceDevArea);
         }
         if(options.isFrontAndBack){
-            container.appendChild(swtichRow);
+            container.appendChild(switchRow);
         }
         container.appendChild(workspaceOptions);
 
@@ -204,58 +209,60 @@ function MultiCrop () {
                 // Applying initial crop areas
                 if(options.initialCropAreas) {
                     options.initialCropAreas.map(rect => {
-
-                        var newRect = new fabric.Rect({
-                            left: rect.x,
-                            top: rect.y,
-                            fill: cropAreaColor,
-                            width: rect.width,
-                            height: rect.height,
-                            opacity: cropAreaOpacity,
-                            hasRotatingPoint: false,
-                            selectable: true
-                        });
-
-                        newRect.toObject = (function(toObject) {
-                            return function() {
-                            return fabric.util.object.extend(toObject.call(this), {
-                                name: this.name,
-                                isFront: this.isFront,
-                                originalOpacity: this.originalOpacity
+                        if(rect.width > 0 && rect.height > 0)
+                        {
+                            var newRect = new fabric.Rect({
+                                left: rect.x,
+                                top: rect.y,
+                                fill: cropAreaColor,
+                                width: rect.width,
+                                height: rect.height,
+                                opacity: cropAreaOpacity,
+                                hasRotatingPoint: false,
+                                selectable: true
                             });
-                            };
-                        })(newRect.toObject);
-                    
-                        newRect.name = rect.name ? rect.name : 'no-name';
-                        if(!isFrontAndBack) {
-                            newRect.isFront = true;
-                        } else {
-                            newRect.isFront = rect.isFront;
+    
+                            newRect.toObject = (function(toObject) {
+                                return function() {
+                                return fabric.util.object.extend(toObject.call(this), {
+                                    name: this.name,
+                                    isFront: this.isFront,
+                                    originalOpacity: this.originalOpacity
+                                });
+                                };
+                            })(newRect.toObject);
+                        
+                            newRect.name = rect.name ? rect.name : 'no-name';
+                            if(!isFrontAndBack) {
+                                newRect.isFront = true;
+                            } else {
+                                newRect.isFront = rect.isFront;
+                            }
+                            newRect.originalOpacity = cropAreaOpacity;
+    
+                            if(!newRect.isFront) {
+                                newRect.opacity = 0;
+                                newRect.selectable = false;
+                            }
+    
+                            newRect.on('mousedown', function(event) {
+                                selectedCropArea = event.target;
+                                rectLogger(selectedCropArea);
+                                //console.log(event);
+                            });
+                        
+                            newRect.on('scaled', function(event) {
+                                selectedCropArea = event.target;
+                                rectLogger(selectedCropArea);
+                            });
+    
+                            newRect.on('mousemove', function(event) {
+                                rectLogger(event.target);
+                            });
+                        
+                            canvas.add(newRect);
+                            cropAreas.push(newRect);
                         }
-                        newRect.originalOpacity = cropAreaOpacity;
-
-                        if(!newRect.isFront) {
-                            newRect.opacity = 0;
-                            newRect.selectable = false;
-                        }
-
-                        newRect.on('mousedown', function(event) {
-                            selectedCropArea = event.target;
-                            rectLogger(selectedCropArea);
-                            //console.log(event);
-                        });
-                    
-                        newRect.on('scaled', function(event) {
-                            selectedCropArea = event.target;
-                            rectLogger(selectedCropArea);
-                        });
-
-                        newRect.on('mousemove', function(event) {
-                            rectLogger(event.target);
-                        });
-                    
-                        canvas.add(newRect);
-                        cropAreas.push(newRect);
                     });
                 }
 
@@ -267,12 +274,19 @@ function MultiCrop () {
                 canvas.setHeight(512);
             }
 
+            switchCropAreas();
             canvas.renderAll();
         });
     }
 
     this.loadImageBase64 = function (imgBase64, isFront) {
         loadingAnimation(true);
+
+        if(isFront && canvasImageFront){
+            canvas.remove(canvasImageFront);
+        } else if(!isFront && canvasImageBack){
+            canvas.remove(canvasImageBack);
+        }
 
         fabric.util.loadImage(imgBase64, function (img) {
             object = new fabric.Image(img);
@@ -328,6 +342,7 @@ function MultiCrop () {
                 copyCanvasImageBack = copyObject;
             }
 
+            switchImages();
             loadingAnimation(false);
         });
     }
@@ -379,6 +394,38 @@ function MultiCrop () {
 
     this.getCroppedImages = function () {
         return croppedImages;
+    }
+
+    this.hideCanvas = function() {
+        var workspace = document.getElementById('workspace-area');
+        var switchOptions = document.getElementById('workspace-switch');
+
+        workspace.style.display = 'none';
+        switchOptions.style.display = 'none';
+    }
+
+    this.showCanvas = function() {
+        var workspace = document.getElementById('workspace-area');
+        var switchOptions = document.getElementById('workspace-switch');
+
+        workspace.style.display = 'flex';
+        switchOptions.style.display = 'flex';
+    }
+
+    this.disableButton = function(buttonId) {
+        var button = document.getElementById(buttonId);
+        if(button) {
+            button.disabled = true;
+            button.style.display = 'none';
+        }
+    }
+
+    this.enableButton = function(buttonId) {
+        var button = document.getElementById(buttonId);
+        if(button) {
+            button.disabled = false;
+            button.style.display = 'flex';
+        }
     }
 }
 
@@ -494,6 +541,11 @@ function MultiCrop () {
 
                     switchImages();
                     loadingAnimation(false);
+                    var workspace = document.getElementById('workspace-area');
+                    var switchOptions = document.getElementById('workspace-switch');
+
+                    workspace.style.display = 'flex';
+                    switchOptions.style.display = 'flex';
                 });
             };
             var base64 = reader.readAsDataURL(input.files[0]);
@@ -512,7 +564,7 @@ function MultiCrop () {
             if((rect.isFront && copyCanvasImageFront) || (!rect.isFront && copyCanvasImageBack))
             {
                 var rectFromOriginalImage = getRectFromOriginalImage(rect);
-
+                
                 if(rect.isFront == isFrontSelected){
                     rect.set({ opacity: 0 });
                 }
@@ -613,9 +665,13 @@ function MultiCrop () {
             if(rect.isFront == isFrontSelected){
                 rect.opacity = rect.originalOpacity;
                 rect.selectable = true;
+                rect.hoverCursor = 'all-scroll';
+                canvas.bringToFront(rect);
             } else {
                 rect.opacity = 0;
                 rect.selectable = false;
+                rect.hoverCursor = 'default';
+                canvas.sendToBack(rect);
             }
         });
 
