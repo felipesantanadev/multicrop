@@ -43,6 +43,7 @@ multiCrop.loadWorkspace({
         devMode: false, // Enables or disables the coordinates console
         isFrontAndBack: true, // Indicates if the workspace works with front and back images
         displayCropResults: true, // Enables or disables the crop results visualization
+        imageUploadEvent: () => { alert('Image uploaded!'); }, // This event will be triggered when a file be uploaded by the default upload button
         initialCropAreas: [
             { isFront: true, name: "cropArea1", x: 10, y: 40.9756862745098, width: 81, height: 61 },
             { isFront: true, name: "cropArea2", x: 95.79764705882354, y: 33.981176470588224, width: 81, height: 61 },
@@ -68,8 +69,21 @@ multiCrop.loadWorkspace({
 
 You can search for icons on https://material.io/resources/icons.
 
+### Enabling and disabling a buttons
+```
+multiCrop.enableButton('id');
+multiCrop.disableButton('id');
+```
+
 ### Getting the cropped images
 
 ```
 multiCrop.getCroppedImages();
+```
+
+
+### Showing and hidding canvas
+```
+multiCrop.showCanvas();
+multiCrop.hideCanvas();
 ```
