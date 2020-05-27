@@ -523,6 +523,12 @@ function MultiCrop () {
                         };
                     })(copyObject.toObject);
 
+                    if(isFrontSelected && canvasImageFront){
+                        canvas.remove(canvasImageFront);
+                    } else if(!isFrontSelected && canvasImageBack){
+                        canvas.remove(canvasImageBack);
+                    }
+
                     copyObject.isFront = isFrontSelected;
 
                     if(object.isFront){
