@@ -12,6 +12,7 @@ var isFrontSelected = true, isFrontAndBack = false;
 var canvasImageFront, canvasImageBack, copyCanvasImageFront, copyCanvasImageBack;
 var croppedImages = [];
 var displayCropResults = true;
+var cropAreaControlsVisibility;
 
 function MultiCrop () {
 
@@ -208,6 +209,21 @@ function MultiCrop () {
 
                 // Applying initial crop areas
                 if(options.initialCropAreas) {
+                    if(options.cropAreaControlsVisibility){
+                        var controls = options.cropAreaControlsVisibility;
+                        cropAreaControlsVisibility = {
+                            bl: controls.bottomLeft != undefined ? controls.bottomLeft : true,
+                            br: controls.bottomRight != undefined ? controls.bottomRight : true,
+                            mb: controls.middleBottom != undefined ? controls.middleBottom : true,
+                            ml: controls.middleLeft != undefined ? controls.middleLeft : true,
+                            mr: controls.middleRight != undefined ? controls.middleRight : true,
+                            mt: controls.middleTop != undefined ? controls.middleTop : true,
+                            tl: controls.topLeft != undefined ? controls.topLeft : true,
+                            tr: controls.topRight != undefined ? controls.topRight : true,
+                            mtr: controls.rotationPoint != undefined ? controls.rotationPoint : true,
+                        };
+                    }
+
                     options.initialCropAreas.map(rect => {
                         if(rect.width > 0 && rect.height > 0)
                         {
@@ -218,9 +234,12 @@ function MultiCrop () {
                                 width: rect.width,
                                 height: rect.height,
                                 opacity: cropAreaOpacity,
-                                hasRotatingPoint: false,
                                 selectable: true
                             });
+
+                            if(cropAreaControlsVisibility){
+                                newRect.setControlsVisibility(cropAreaControlsVisibility);
+                            }
     
                             newRect.toObject = (function(toObject) {
                                 return function() {
@@ -436,9 +455,12 @@ function MultiCrop () {
             fill: cropAreaColor,
             width: cropAreaWidth,
             height: cropAreaHeight,
-            opacity: cropAreaOpacity,
-            hasRotatingPoint: false
+            opacity: cropAreaOpacity
         });
+
+        if(cropAreaControlsVisibility){
+            newRect.setControlsVisibility(cropAreaControlsVisibility);
+        }
 
         newRect.on('mousedown', function(event) {
             selectedCropArea = event.target;

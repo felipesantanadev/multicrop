@@ -25,6 +25,17 @@
         devMode: false, // Enables or disables the coordinates console
         isFrontAndBack: true, // Indicates if the workspace works with front and back images
         displayCropResults: true, // Enables or disables the crop results visualization
+        cropAreaControlsVisibility: {
+            bottomLeft: true,
+            bottomRight: true,
+            topLeft: true,
+            topRight: true,
+            middleBottom: false,
+            middleLeft: false,
+            middleRight: false,
+            middleTop: false,
+            rotationPoint: false
+        },
         imageUploadEvent: () => { alert('Uploaded...'); }, // This event will be triggered when a file be uploaded
         initialCropAreas: [
             { isFront: true, name: "name1", x: 290, y: 221, width: 58, height: 75 },
