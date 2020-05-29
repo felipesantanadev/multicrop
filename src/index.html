@@ -13,10 +13,9 @@
 <script src="./js/fabric.min.js"></script>
 <script src="./js/multicrop.js"></script>
 <script>
-    var multiCrop = new MultiCrop();
-    multiCrop.loadWorkspace({
-        width: 425, // Canvas width
-        height: 650, // Canvas height
+    var multiCrop = new MultiCrop({
+        width: 850, // Canvas width
+        height: 425, // Canvas height
         defaultCropAreaWidth: 100, //  Crop object's default width
         defaultCropAreaHeight: 120, // Crop object's default height
         cropAreaColor: 'red', // Crop object's color (any RGB value)
@@ -53,19 +52,17 @@
         ], // Applies initial crop objects in the workspace
         // You can remove default buttons by using the disableButtons property:
         // disableButtons: ['add-image', 'add-crop', 'crop-all', 'remove-crop']
-    }).then(() => { 
-        //multiCrop.hideCanvas();
-        // Adicionando um botão customizado no workspace:
-        // multiCrop.addButton('id', 'class', 'icon name', 'text', click_function, atBeginning);
-        // Ex: multiCrop.addButton('digitalizar', 'btn-multicrop', 'print', 'Digitalizar ficha', () => console.log('clicou'), false);
-        multiCrop.addButton('digitalizar', 'btn-multicrop', 'print', 'Digitalizar ficha', () => {
-            multiCrop.showCanvas();
-            multiCrop.disableButton('add-crop');
-        }, false);
-        // Recuperando as imagens recortadas do workspace:
-        // multiCrop.getCroppedImages();
-
-        console.log('Workspace carregado...');
     });
+
+    //multiCrop.hideCanvas();
+    // Adicionando um botão customizado no workspace:
+    // multiCrop.addButton('id', 'class', 'icon name', 'text', click_function, atBeginning);
+    // Ex: multiCrop.addButton('digitalizar', 'btn-multicrop', 'print', 'Digitalizar ficha', () => console.log('clicou'), false);
+    multiCrop.addButton('digitalizar', 'btn-multicrop', 'print', 'Digitalizar ficha', () => {
+        multiCrop.showCanvas();
+        multiCrop.disableButton('add-crop');
+    }, false);
+    // Recuperando as imagens recortadas do workspace:
+    // multiCrop.getCroppedImages();
 </script>
 </html>

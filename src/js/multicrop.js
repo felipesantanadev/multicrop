@@ -14,9 +14,13 @@ var croppedImages = [];
 var displayCropResults = true;
 var cropAreaControlsVisibility;
 
-function MultiCrop () {
+class MultiCrop {
 
-    const createWorkspace = async (options) => {
+    constructor(options){
+        this.loadWorkspace(options);
+    }
+
+    async createWorkspace(options) {
         // Creating the container
         var container = document.getElementsByClassName('workspace-container')[0];
 
@@ -184,8 +188,8 @@ function MultiCrop () {
         canvas = new fabric.Canvas('workspace', { selection: false });
     }
 
-    this.loadWorkspace = async (options) => {
-        createWorkspace(options).then(() => {
+    loadWorkspace(options) {
+        this.createWorkspace(options).then(() => {
             if(options){
                 canvasWidth = options.width ? options.width : 1024;
                 canvasHeight = options.height ? options.height : 512;
@@ -298,7 +302,7 @@ function MultiCrop () {
         });
     }
 
-    this.loadImageBase64 = function (imgBase64, isFront) {
+    loadImageBase64(imgBase64, isFront) {
         loadingAnimation(true);
 
         if(isFront && canvasImageFront){
@@ -366,7 +370,7 @@ function MultiCrop () {
         });
     }
 
-    this.createButton = function (id, className, iconName, text, onclickAction) {
+    createButton(id, className, iconName, text, onclickAction) {
         var button = document.createElement('button');
         button.setAttribute('id', id);
         button.setAttribute('class', className);
@@ -386,7 +390,7 @@ function MultiCrop () {
         return button;
     }
 
-    this.addButton = function (id, className, iconName, text, onclickAction, atBeginning) {
+    addButton(id, className, iconName, text, onclickAction, atBeginning) {
         var options = document.getElementById('workspace-options');
         var button = document.createElement('button');
         button.setAttribute('id', id);
@@ -411,11 +415,11 @@ function MultiCrop () {
         }
     }
 
-    this.getCroppedImages = function () {
+    getCroppedImages() {
         return croppedImages;
     }
 
-    this.hideCanvas = function() {
+    hideCanvas() {
         var workspace = document.getElementById('workspace-area');
         var switchOptions = document.getElementById('workspace-switch');
 
@@ -423,7 +427,7 @@ function MultiCrop () {
         switchOptions.style.display = 'none';
     }
 
-    this.showCanvas = function() {
+    showCanvas() {
         var workspace = document.getElementById('workspace-area');
         var switchOptions = document.getElementById('workspace-switch');
 
@@ -431,7 +435,7 @@ function MultiCrop () {
         switchOptions.style.display = 'flex';
     }
 
-    this.disableButton = function(buttonId) {
+    disableButton(buttonId) {
         var button = document.getElementById(buttonId);
         if(button) {
             button.disabled = true;
@@ -439,7 +443,7 @@ function MultiCrop () {
         }
     }
 
-    this.enableButton = function(buttonId) {
+    enableButton(buttonId) {
         var button = document.getElementById(buttonId);
         if(button) {
             button.disabled = false;

@@ -25,14 +25,7 @@ Apply the following `div` in the place you want to display the workspace.
 Load the workspace when needed.
 
 ```
-var multiCrop = new MultiCrop();
-multiCrop.loadWorkspace();
-```
-
-You can configure many properties of the workspace
-
-```
-multiCrop.loadWorkspace({
+var multiCrop = new MultiCrop({
         width: 850, // Canvas width
         height: 425, // Canvas height
         defaultCropAreaWidth: 100, //  Crop object's default width
@@ -43,6 +36,17 @@ multiCrop.loadWorkspace({
         devMode: false, // Enables or disables the coordinates console
         isFrontAndBack: true, // Indicates if the workspace works with front and back images
         displayCropResults: true, // Enables or disables the crop results visualization
+        cropAreaControlsVisibility: {
+            bottomLeft: true,
+            bottomRight: true,
+            topLeft: true,
+            topRight: true,
+            middleBottom: false,
+            middleLeft: false,
+            middleRight: false,
+            middleTop: false,
+            rotationPoint: false
+        },
         imageUploadEvent: () => { alert('Image uploaded!'); }, // This event will be triggered when a file be uploaded by the default upload button
         initialCropAreas: [
             { isFront: true, name: "cropArea1", x: 10, y: 40.9756862745098, width: 81, height: 61 },
@@ -58,13 +62,10 @@ multiCrop.loadWorkspace({
 ### Adding a custom button
 
 ```
-multiCrop.loadWorkspace({
-    ...
-}).then(() => {
-    // multiCrop.addButton('id', 'class', 'material icon', 'text', click_function, atBeginning);
-    // Eg:
-    multiCrop.addButton('my-id', 'my-class', 'print', 'Click me', () => console.log('click event'), false);
-});
+// multiCrop.addButton('id', 'class', 'material icon', 'text', click_function, atBeginning);
+
+// Eg:
+multiCrop.addButton('my-id', 'my-class', 'print', 'Click me', () => console.log('click event'), false);
 ```
 
 You can search for icons on https://material.io/resources/icons.
