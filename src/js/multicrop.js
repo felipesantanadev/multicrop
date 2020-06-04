@@ -90,10 +90,7 @@ class MultiCrop {
             fileInput.setAttribute('type', 'file');
             fileInput.style.display = 'none';
             fileInput.addEventListener('change', function(e){
-                loadImage(fileInput);
-                if(options.imageUploadEvent != undefined){
-                    options.imageUploadEvent();
-                }
+                loadImage(fileInput, options.imageUploadEvent);
             });
 
             fileSelection.addEventListener("click", function (e) {
@@ -331,6 +328,12 @@ class MultiCrop {
                 };
             })(object.toObject);
 
+            if(isFrontSelected && canvasImageFront){
+                canvas.remove(canvasImageFront);
+            } else if(!isFrontSelected && canvasImageBack){
+                canvas.remove(canvasImageBack);
+            }
+
             object.isFront = isFront;
 
             copyObject = new fabric.Image(img);
@@ -412,6 +415,13 @@ class MultiCrop {
             options.insertBefore(button, options.firstChild);
         } else {
             options.appendChild(button);
+        }
+    }
+
+    getImages() {
+        return {
+            frontImage: copyCanvasImageFront,
+            backImage: copyCanvasImageBack
         }
     }
 
@@ -505,7 +515,7 @@ class MultiCrop {
     var copyObject;
     var newImageDimensions;
 
-    function loadImage(input) {
+    function loadImage(input, imageUploadEvent) {
         loadingAnimation(true);
 
         if (input.files && input.files[0]) {
@@ -578,6 +588,10 @@ class MultiCrop {
 
                     workspace.style.display = 'flex';
                     switchOptions.style.display = 'flex';
+
+                    if(imageUploadEvent != undefined){
+                        imageUploadEvent();
+                    }
                 });
             };
             var base64 = reader.readAsDataURL(input.files[0]);
@@ -711,7 +725,12 @@ class MultiCrop {
     }
 
     const switchImages = () => {
-        removeAllImagesFromCanvas();
+        if(canvasImageFront){
+            canvas.remove(canvasImageFront);
+        }
+        if(canvasImageBack){
+            canvas.remove(canvasImageBack);
+        }
 
         if(isFrontSelected && canvasImageFront) {
             canvas.add(canvasImageFront);
