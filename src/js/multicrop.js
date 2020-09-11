@@ -476,6 +476,20 @@ class MultiCrop {
             newRect.setControlsVisibility(cropAreaControlsVisibility);
         }
 
+        newRect.toObject = (function(toObject) {
+            return function() {
+            return fabric.util.object.extend(toObject.call(this), {
+                name: 'no-name',
+                isFront: isFrontSelected,
+                originalOpacity: cropAreaOpacity
+            });
+            };
+        })(newRect.toObject);
+    
+        newRect.name = 'no-name';
+        newRect.isFront = isFrontSelected;
+        newRect.originalOpacity = cropAreaOpacity;
+
         newRect.on('mousedown', function(event) {
             selectedCropArea = event.target;
             rectLogger(selectedCropArea);
@@ -599,6 +613,7 @@ class MultiCrop {
     }
 
     const crop = async () => {
+        console.log('Passo 1');
         croppedImages = [];
         var results = document.getElementById('crop-links');
         if(results){
@@ -607,14 +622,17 @@ class MultiCrop {
 
         var index = 1;
         cropAreas.map((rect) => {
+            console.log('Passo 2');
+            console.log('Passo 2');
             if((rect.isFront && copyCanvasImageFront) || (!rect.isFront && copyCanvasImageBack))
             {
+                console.log('Passo 2.2');
                 var rectFromOriginalImage = getRectFromOriginalImage(rect);
-                
+                console.log('Passo 3');
                 if(rect.isFront == isFrontSelected){
                     rect.set({ opacity: 0 });
                 }
-                
+                console.log('Passo 4');
                 canvas.add(rect.isFront ? copyCanvasImageFront : copyCanvasImageBack);
                 var img = canvas.toDataURL({
                     format: imageFormat,
@@ -625,8 +643,11 @@ class MultiCrop {
                     // width: rect.getScaledWidth(),
                     // height: rect.getScaledHeight()
                 });
+                console.log('Passo 5');
                 canvas.remove(rect.isFront ? copyCanvasImageFront : copyCanvasImageBack);
+                console.log('Passo 6');
                 addResult(img, rect.name ? rect.name : `Recorte ${index}`);
+                console.log('Passo 7');
                 index += 1;
                 if(rect.isFront == isFrontSelected){
                     rect.set({ opacity: 0.4 });   
